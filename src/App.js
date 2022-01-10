@@ -4,6 +4,7 @@ import { Link,Route,Switch } from 'react-router-dom';
 import Leave from './page/Leave';
 import Home from './page/Home';
 import User from './page/User';
+import Login from './page/Login';
 import UserAdd from './page/UserAdd';
 import 'antd/dist/antd.css';
 //import Test from './component/test';
@@ -20,6 +21,7 @@ function App() {
       <Switch>
         <Route exact path="/"><Home /></Route>
         <Route path="/leave"><Leave /></Route>
+        <Route path="/login"><Login /></Route>
         <Route exact path="/user"><User /></Route>
         <Route path="/user/new"><UserAdd /></Route>
       </Switch>

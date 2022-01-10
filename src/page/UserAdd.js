@@ -23,14 +23,9 @@ const User = (prop) => {
     const myJSON = JSON.stringify(values);
     console.log('myJSON:', myJSON);
 
-    axios.post(`${baseURL}emp`,{
-      "email":values.email,
-      "password":values.password,
-      "first_name":values.first_name,
-      "last_name":values.last_name,
-      "position":values.position,
-      "role":values.role,
-    }).then((respons) => {
+    axios.post(`${baseURL}emp`,
+      values
+    ).then((respons) => {
       setData(respons.data)
     })
       message.error('Success');

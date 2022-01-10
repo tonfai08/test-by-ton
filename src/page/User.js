@@ -32,21 +32,18 @@ const Page = (prop) => {
 
   const onFinish = (values) => {
     
-
+    console.log('values:', values);
     const myJSON = JSON.stringify(values);
-   // console.log('myJSON:', myJSON);
+  // console.log('myJSON:', myJSON);
 
-    // axios.post(`${baseURL}emp`,{
-    //   "email":values.email,
-    //   "password":values.password,
-    //   "first_name":values.first_name,
-    //   "last_name":values.last_name,
-    //   "position":values.position,
-    //   "role":values.role,
-    // }).then((respons) => {
-    //   setData(respons.data)
-    // })
+    axios.put(`${baseURL}emp/${values._id}`,
+      values
+    ).then((respons) => {
+      console.log(respons)
+    })
       message.error('Success');
+      setEditUser(undefined);
+      EmpGetAll();
   };
 
   const columns = [
@@ -102,7 +99,7 @@ console.log(data)
           <Row gutter={16}>
             <Col span={24}>
               <Table 
-                columns={columns} 
+                columns={columns}
                 dataSource={data} 
               />
             </Col>
@@ -137,6 +134,9 @@ console.log(data)
                   <Select.Option value="Admin">Admin</Select.Option>
                     <Select.Option value="User">User</Select.Option>
                   </Select>
+                </Form.Item>
+                <Form.Item name="_id" label="Id" hidden={true}  rules={[{ required: true}]}>
+                  <Input />
                 </Form.Item>
                 <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
                   <Button type="primary" htmlType="submit">
