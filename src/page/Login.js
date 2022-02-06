@@ -1,13 +1,37 @@
 
-import Layout from "../component/Layout";
-import { Typography,Row,Card,Col, Form, Input, Button, Checkbox } from 'antd';
-const { Title } = Typography;
-const Home = () => {
-  const p_link = ["Home"];
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import { Row,Card,Col, Form, Input, Button, message } from 'antd';
 
+
+const Home = () => {
+
+  const [data, setData] = useState(null);
+  const baseURL ="http://localhost:5000/";
+
+
+  const callAPI = (values) =>{
+    axios.post(`${baseURL}auth`,
+      values
+    ).then((respons) => {
+      setData(respons.data)
+    })
+  }
+  const onFinish = (values) => {
+    console.log('data',values);
+    callAPI(values);
+    console.log(data);
+    if(data.status === 'error')
+    {
+      message.error(data.detail)
+    }
+    else{
+      message.success(data.detail)
+    }
+  };
+  useEffect(() => {
+
+  }, []);
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
