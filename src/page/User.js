@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import Layout from "../component/Layout";
 import { Typography,Row,Col,Table, Button,Modal,Form,Input,Select,message } from 'antd';
 import axios from "axios";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link,useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 
 const Page = (prop) => {
+  const history = useHistory();
   const [data, setData] = useState(null);
   const [editUser, setEditUser] = useState(undefined);
   const p_link = ["User"];
@@ -45,7 +46,13 @@ const Page = (prop) => {
       setEditUser(undefined);
       EmpGetAll();
   };
-
+  const checkToken = () => {
+    const token = localStorage.getItem('token');
+    console.log('token',token)
+    if(!token){
+      history.push("/login");
+    }
+   };
   const columns = [
     {
       title: 'Email',
@@ -81,7 +88,8 @@ const Page = (prop) => {
   ];
 
     useEffect(() => {
-      EmpGetAll()
+      EmpGetAll();
+      checkToken();
     }, []);
 console.log(data)
   return (

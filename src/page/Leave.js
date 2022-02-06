@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../component/Layout";
 import { Typography,Row,Col, Button,Calendar } from 'antd';
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Link,useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import moment from "moment";
 const { Title } = Typography;
 const Leave = () => {
   const p_link = ["Leave"];
+  const history = useHistory();
 
   function getListData(value) {
     let listData;
@@ -63,6 +64,16 @@ const Leave = () => {
     }
     return <div style={style}>{day}</div>;
   }
+  const checkToken = () => {
+    const token = localStorage.getItem('token');
+    console.log('token',token)
+    if(!token){
+      history.push("/login");
+    }
+   };
+   useEffect(() => {
+    checkToken();
+  });
   return (
     <>
       <Layout current={p_link} >

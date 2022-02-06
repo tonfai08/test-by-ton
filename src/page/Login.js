@@ -2,36 +2,46 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Row,Card,Col, Form, Input, Button, message } from 'antd';
+import { Link, useHistory } from "react-router-dom";
 
 
 const Home = () => {
-
-  const [data, setData] = useState(null);
+  const history = useHistory();
+  const [data, setData] = useState({'status': 'error'});
   const baseURL ="http://localhost:5000/";
 
 
-  const callAPI = (values) =>{
-    axios.post(`${baseURL}auth`,
+  const callAPI = async (values) =>{
+    await axios.post(`${baseURL}auth`,
       values
     ).then((respons) => {
+      console.log('data',respons.data);
       setData(respons.data)
     })
   }
   const onFinish = (values) => {
-    console.log('data',values);
+   // console.log('data',values);
     callAPI(values);
-    console.log(data);
-    if(data.status === 'error')
+    console.log('responsData',data);
+   if(data.status === 'error')
     {
       message.error(data.detail)
     }
     else{
       message.success(data.detail)
+      localStorage.setItem('token',data.detail);
     }
   };
+  const checkToken = (values) => {
+    const token = localStorage.getItem('token');
+    console.log('token',token)
+    if(token){
+      history.push("/");
+    }
+   };
   useEffect(() => {
-
-  }, []);
+    checkToken();
+  }, [data]);
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
