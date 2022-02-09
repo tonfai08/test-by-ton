@@ -1,48 +1,112 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../component/Layout";
-import { Typography,Row,Col, Button,Calendar } from 'antd';
+import { Table,Input,Tabs,Typography,Row,Col,Calendar,Form, DatePicker, Select, Button ,message, Card } from 'antd';
 import { Link,useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import axios from "axios";
 import moment from "moment";
+
+const { TextArea } = Input;
+const { RangePicker } = DatePicker;
+const { TabPane } = Tabs;
 const { Title } = Typography;
+
 const Leave = () => {
+  const baseURL ="http://localhost:5000/";
+  const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+  };
   const p_link = ["Leave"];
   const history = useHistory();
-
-  function getListData(value) {
-    let listData;
-    switch (moment( value, 'MM-DD-YYYY HH:mm:ss',true).format("YYYY-MM-DD")) {
-      case "2021-12-01":
-        listData = [
-          { type: 'warning', content: 'This is warning event.' },
-          { type: 'success', content: 'This is usual event.' },
-        ];
-        break;
-      case 10:
-        listData = [
-          { type: 'warning', content: 'This is warning event.' },
-          { type: 'success', content: 'This is usual event.' },
-          { type: 'error', content: 'This is error event.' },
-        ];
-        break;
-      case 15:
-        listData = [
-          { type: 'warning', content: 'This is warning event' },
-          { type: 'success', content: 'This is very long usual event。。....' },
-          { type: 'error', content: 'This is error event 1.' },
-          { type: 'error', content: 'This is error event 2.' },
-          { type: 'error', content: 'This is error event 3.' },
-          { type: 'error', content: 'This is error event 4.' },
-        ];
-        break;
-      default:
-    }
-    return listData || [];
+  const [data, setData] = useState(null);
+  const [leave, setLeave] = useState(null);
+  const [userId, setUserId] = useState(null);
+  var jwt = require("jsonwebtoken");
+  const token = localStorage.getItem('token');
+  var decode1 = jwt.decode(token);
+  const setUser = () =>{
+    var decode1 = jwt.decode(token);
+    setUserId(decode1);
   }
+  const leaveAPI =  async () =>{
+    try{
+       const leave = await axios.get(`${baseURL}leave/${decode1.id}`,{
+         headers:{
+           token:token
+         }
+     }
+    )
+    
+    setLeave(leave.data);
+   } catch(error){
+     console.log(error.message)
+   }
+  }
+  const leaveType = (type) =>{
+    const intType = parseInt(type);
+    if(intType === 1){
+      return "ลากิจ";
+    } 
+    else if(intType === 2){
+      return "ลาป่วย";
+    }
+    else if(intType === 3){
+      return "ลาบวช";
+    }
+    else {
+      return "ลาตุ้ย";
+    }
+  }
+  const dayMoment = (day) =>{
+      var arrayLength = day.length;
+      // for (var i = 0; i < arrayLength; i++) {
+      //     console.log(day[i]);
+      //     return day[i];
+      // }
+      const day1 = moment(day[0]).format('YYYY/MM/DD');
+      const day2 = moment(day[arrayLength-1]).format('YYYY/MM/DD');
+      console.log('dayy',day2);
+      if(day1 === day2){
+        return day1;
+      }
+      else{
+        return day1+"-"+day2;
+      }
+     // return day[arrayLength];
+  }
+    const daySum = (day) =>{
+      var arrayLength = day.length;
+      // for (var i = 0; i < arrayLength; i++) {
+      //     console.log(day[i]);
+      //     return day[i];
+      // }
+      const day1 = moment(day[0]);
+      const day2 = moment(day[arrayLength-1]);
+      console.log('moment',moment(day1).diff(day2, 'days'));
+        return moment(day2).diff(day1, 'days')+1 ;
+
+  }
+  const dateCreate = (day) =>{
+    const day1 = moment(day).format('YYYY/MM/DD');
+
+      return day1 ;
+
+}
+const appr = (approve) =>{
+  if(approve === "true"){
+    return "อนุมัติ";
+  }
+  else if(approve === "false"){
+    return "ไม่อนุมัติ";
+  }
+  else{
+    return "รออนุมัติ";
+  }
+
+}
 
 
   function dateCellRender(value) {
-    // const listData = getListData(value);
-    //console.log("dataCell",moment( value, 'MM-DD-YYYY HH:mm:ss',true).format("YYYY-MM-DD"))
     const day = moment( value, 'MM-DD-YYYY HH:mm:ss',true).format("YYYY-MM-DD");
     let leave_text;
     if(day === "2021-12-20") {
@@ -53,17 +117,7 @@ const Leave = () => {
     }
     return <div>{leave_text}</div>;
   }
-  function onFullRender(date){
-    const day = date.day();
-    let style;
-    if(day === 1) {
-     style = { border: "1px solid #d9d9d9"};
-    }
-    else {
-     style = { border: "1px solid red"};
-    }
-    return <div style={style}>{day}</div>;
-  }
+ 
   const checkToken = () => {
     const token = localStorage.getItem('token');
     console.log('token',token)
@@ -71,9 +125,69 @@ const Leave = () => {
       history.push("/login");
     }
    };
+
+   const onFinish = (values) => {
+    console.log('Success:', values);
+
+    const myJSON = JSON.stringify(values);
+    console.log('myJSON:', myJSON);
+    values.empId=decode1.id;
+    axios.post(`${baseURL}leave`,
+      values,{
+        headers:{
+          token:token
+        }
+      },
+    ).then((respons) => {
+      setData(respons.data)
+    })
+      leaveAPI();
+      message.error('Success');
+  };
+  const columns = [
+    {
+      title: 'ประเภทการลา',
+      dataIndex: 'leave_type',
+      render: (t, r, i) => 
+       <>{leaveType(t)}</>,
+    },
+    {
+      title: 'วันที่',
+      dataIndex: 'date_leave',
+      render: (t, r, i) => 
+       <>{dayMoment(t)}</>,
+    },
+    {
+      title: 'จำนวนวันที่ลา',
+      dataIndex: 'date_leave',
+      render: (t, r, i) => 
+       <>{daySum(t)}</>,
+    },
+    {
+      title: 'การอนุมัติ',
+      dataIndex: 'approver',
+      render: (t, r, i) => 
+      <>{appr(t)}</>,
+    },
+    {
+      title: 'วันที่ลา',
+      dataIndex: 'create_date',
+      render: (t, r, i) => 
+      <>{dateCreate(t)}</>,
+    },
+    // {
+    //   title: 'Action',
+    //   key: '_id',
+    //   width: 100,
+    //   render: (t,r) => <a>Edit</a>,
+    // },
+
+  ];
    useEffect(() => {
+    setUser();
+    leaveAPI();
     checkToken();
-  });
+  },[]);
   return (
     <>
       <Layout current={p_link} >
@@ -83,12 +197,54 @@ const Leave = () => {
               </Title>
             </Col>
             <Col span={12}>
-              <Link  to="#"><Button type="primary">+ ลา</Button></Link>
+              {/* <Link  to="#"><Button type="primary">+ ลา</Button></Link> */}
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={24}>
-              <Calendar dateCellRender={dateCellRender}/>
+              <Card>
+              
+              <Form {...layout} name="nest-messages" onFinish={onFinish}>
+                  <Form.Item  name="leave_type" label="ประเภทการลา">
+                    <Select>
+                      <Select.Option value="1">ลากิจ</Select.Option>
+                      <Select.Option value="2">ลาป่วย</Select.Option>
+                      <Select.Option value="3">ลาไปเรื่อย</Select.Option>
+                      <Select.Option value="4">ลาตุ่ย</Select.Option>
+                    </Select>
+                  </Form.Item>
+                  <Form.Item name="date_leave" label="วันที่ลา">
+                   <RangePicker />
+                  </Form.Item>
+                  <Form.Item name="note" label="เหตุผลในการลา">
+                    <TextArea rows={4} />
+                  </Form.Item>
+                  <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 8 }}>
+                    <Button type="primary" htmlType="submit">
+                      ส่ง
+                    </Button>
+                  </Form.Item>
+                </Form>
+                  
+              </Card>
+            </Col>
+          </Row>
+          <div style={{marginTop:"10px"}}/>
+          <Row gutter={16}>
+            <Col span={24}>
+            <Card>
+            <Tabs defaultActiveKey="1">
+              <TabPane tab="Table" key="1">
+                <Table 
+                  columns={columns}
+                  dataSource={leave} 
+                />
+              </TabPane>
+              <TabPane tab="Calendar" key="2">
+                <Calendar dateCellRender={dateCellRender}/>
+              </TabPane>
+            </Tabs>
+            </Card>
             </Col>
           </Row>
       </Layout>

@@ -23,9 +23,11 @@ const AppLayout = (props) => {
             <Menu.Item key="Home" icon={<PieChartOutlined />}>
               <Link to="/">Home</Link>
             </Menu.Item>
+            {props.role === "Admin"? 
             <Menu.Item key="User" icon={<DesktopOutlined />}>
               <Link to="/user">User</Link>
             </Menu.Item>
+            :""}
             <Menu.Item key="Leave" icon={<FileOutlined />}>
              <Link to="/leave">Leave</Link>
             </Menu.Item>
