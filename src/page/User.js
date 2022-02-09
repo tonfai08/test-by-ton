@@ -15,7 +15,12 @@ const Page = (prop) => {
 
   const { Title } = Typography;
   const EmpGetAll = () =>{
-    axios.get(`${baseURL}emp`).then((respons) => {
+    const token = localStorage.getItem('token');
+    axios.get(`${baseURL}emp`,{
+      headers:{
+        token:token
+      }
+    }).then((respons) => {
         setData(respons.data)
     })
   }

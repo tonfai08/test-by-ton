@@ -12,24 +12,26 @@ const Home = () => {
 
 
   const callAPI = async (values) =>{
-    await axios.post(`${baseURL}auth`,
+    return await axios.post(`${baseURL}auth`,
       values
     ).then((respons) => {
       console.log('data',respons.data);
-      setData(respons.data)
+      return respons.data;
     })
+   
   }
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
    // console.log('data',values);
-    callAPI(values);
-    console.log('responsData',data);
-   if(data.status === 'error')
+    const api = await callAPI(values);
+    console.log('responsData',api);
+    if(api.status === 'error')
     {
-      message.error(data.detail)
+      message.error(api.detail)
     }
     else{
-      message.success(data.detail)
-      localStorage.setItem('token',data.detail);
+      message.success(api.detail)
+      localStorage.setItem('token',api.detail);
+      checkToken();
     }
   };
   const checkToken = (values) => {
@@ -41,7 +43,7 @@ const Home = () => {
    };
   useEffect(() => {
     checkToken();
-  }, [data]);
+  }, []);
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
   };
