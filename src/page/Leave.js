@@ -38,6 +38,7 @@ const Leave = () => {
     )
     
     setLeave(leave.data);
+    console.log('leave',leave)
    } catch(error){
      console.log(error.message)
    }
@@ -65,7 +66,7 @@ const Leave = () => {
       // }
       const day1 = moment(day[0]).format('YYYY/MM/DD');
       const day2 = moment(day[arrayLength-1]).format('YYYY/MM/DD');
-      console.log('dayy',day2);
+      //console.log('dayy',day2);
       if(day1 === day2){
         return day1;
       }
@@ -82,7 +83,7 @@ const Leave = () => {
       // }
       const day1 = moment(day[0]);
       const day2 = moment(day[arrayLength-1]);
-      console.log('moment',moment(day1).diff(day2, 'days'));
+      //console.log('moment',moment(day1).diff(day2, 'days'));
         return moment(day2).diff(day1, 'days')+1 ;
 
   }
@@ -127,10 +128,10 @@ const appr = (approve) =>{
    };
 
    const onFinish = (values) => {
-    console.log('Success:', values);
+    //console.log('Success:', values);
 
     const myJSON = JSON.stringify(values);
-    console.log('myJSON:', myJSON);
+    //console.log('myJSON:', myJSON);
     values.empId=decode1.id;
     axios.post(`${baseURL}leave`,
       values,{
@@ -159,9 +160,9 @@ const appr = (approve) =>{
     },
     {
       title: 'จำนวนวันที่ลา',
-      dataIndex: 'date_leave',
+      dataIndex: 'duration',
       render: (t, r, i) => 
-       <>{daySum(t)}</>,
+       <>{t}</>,
     },
     {
       title: 'การอนุมัติ',
