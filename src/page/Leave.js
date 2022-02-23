@@ -218,8 +218,7 @@ const appr = (approve) =>{
         ))}
       </ul>
     );
-  }
-  console.log('dateCellRendert',dateCellRendert(value))
+  }                                                 
   const holiday = [
     { day: '2022/02/14', content: 'วาเลนไท', type: 'error' },
     { day: '2022/02/14', content: 'วาเลนไท', type: 'success' },
