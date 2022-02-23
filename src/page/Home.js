@@ -39,6 +39,7 @@ const Home = () => {
           }
       }
      )
+     
      setData(data);
      //console.log(data)
     } catch(error){
