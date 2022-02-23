@@ -91,6 +91,27 @@ const Page = (prop) => {
     },
 
   ];
+  const holiday = [
+    {
+      title: 'Email',
+    },
+    {
+      title: 'first_name',
+    },
+    {
+      title: 'last_name',
+    },
+    {
+      title: 'role',
+    },
+    {
+      title: 'position',
+    },
+    {
+      title: 'create_date',
+    },
+
+  ];
 
     useEffect(() => {
       EmpGetAll();
