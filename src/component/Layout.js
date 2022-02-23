@@ -13,7 +13,20 @@ const { SubMenu } = Menu;
 const { Header, Content, Footer, Sider } = Layout;
 const AppLayout = (props) => {
   const [date, setDate] = useState(null);
-   
+  var jwt = require("jsonwebtoken");
+  const token = localStorage.getItem('token');
+  var decode1 = "";
+  if(token === null){
+    //console.log('decode1',"test")
+    var role = '';
+  } 
+  else
+  {
+    var decode1 = jwt.decode(token);
+    var role = decode1.role;
+    console.log('decode1',decode1)
+  }
+
   return (
     <>
    <Layout style={{ minHeight: '100vh' }}>
@@ -23,7 +36,7 @@ const AppLayout = (props) => {
             <Menu.Item key="Home" icon={<PieChartOutlined />}>
               <Link to="/">Home</Link>
             </Menu.Item>
-            {props.role === "Admin"? 
+            {decode1.role === "Admin"? 
             <Menu.Item key="User" icon={<DesktopOutlined />}>
               <Link to="/user">User</Link>
             </Menu.Item>

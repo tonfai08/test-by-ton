@@ -9,7 +9,7 @@ const Home = () => {
   const history = useHistory();
   const [data, setData] = useState({'status': 'error'});
   const baseURL ="http://localhost:5000/";
-
+  var jwt = require("jsonwebtoken");
 
   const callAPI = async (values) =>{
     return await axios.post(`${baseURL}auth`,

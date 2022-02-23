@@ -7,14 +7,12 @@ import axios from "axios";
 const { Title } = Typography;
 
 const Home = () => {
-  const [user, setUser] = useState({});
+  //const [user, setUser] = useState({});
   const checkToken = () => {
     if(!token){
       history.push("/login");
     }else{
-      const token = localStorage.getItem('token');
-       const decode1 = jwt.decode(token);
-       setUser(decode1)
+   
     }
    };
   const baseURL ="http://localhost:5000/";
@@ -22,8 +20,15 @@ const Home = () => {
   const [leave, setLeave] = useState({});
   var jwt = require("jsonwebtoken");
   const token = localStorage.getItem('token');
-  const decode1 = jwt.decode(token);
-  console.log(user.role) 
+  var decode1 = "";
+  if(!token === null){
+    //console.log('decode1',"test")
+  } 
+  else
+  {
+    var decode1 = jwt.decode(token);
+    //console.log('decode1',decode1.role)
+  }
   const p_link = ["Home"];
   const history = useHistory();
    const callAPI =  async () =>{
@@ -63,7 +68,7 @@ const Home = () => {
   },[]);
   return (
     <>
-      <Layout current={p_link} role={user.role}> 
+      <Layout current={p_link} > 
           <Title level={2}>Profile</Title>
           <Card>
             <Descriptions title="Profile" bordered
