@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../component/Layout";
-import { Table,Input,Tabs,Typography,Row,Col,Calendar,Form, DatePicker, Select, Button ,message, Card } from 'antd';
+import { Table,Input,Tabs,Typography,Row,Col,Calendar,Form, DatePicker, Select, Button ,message, Card,Badge } from 'antd';
 import { Link,useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import axios from "axios";
 import moment from "moment";
@@ -184,6 +184,55 @@ const appr = (approve) =>{
     // },
 
   ];
+
+  // const dateCellRendert = (value) => {
+  //   console.log('value',moment(value).format('YYYY/MM/DD'));
+    
+  //   const listData = getListData(value);
+  //   listData.map((item) => {
+  //     if (item !== 'undefined') {
+  //       console.log('ไม่ผ่าน',item.content);
+  //       return "test test";
+        
+  //     }
+  //     console.log('ผ่าน',item.content);
+  //     return (
+  //       <ul className="events">
+  //         <li key={item.content}>
+  //           <Badge status={item.type} text={item.content} />
+  //         </li>
+  //     </ul>
+  //     );
+  //   })
+  // }
+ 
+  const dateCellRendert = (value) => {
+    const listData = getListData(value);
+    console.log(listData[0]);
+    return (
+      <ul className="events">
+        {listData.map(item => (
+          <li key={item.day}>
+            <Badge status={item.type} text={item.content} />
+          </li>
+        ))}
+      </ul>
+    );
+  }
+  console.log('dateCellRendert',dateCellRendert(value))
+  const holiday = [
+    { day: '2022/02/14', content: 'วาเลนไท', type: 'error' },
+    { day: '2022/02/14', content: 'วาเลนไท', type: 'success' },
+    { day: '2022/03/01', content: 'อยากหยุด', type: 'error'  },
+    { day: '2022/03/25', content: 'ก็จะหยุดอะ', type: 'error'  },
+  ];
+  function getListData(value) {
+    let listData;
+    listData = holiday.filter(holiday => holiday.day === moment(value).format('YYYY/MM/DD'));
+    return listData;
+   
+    }
+
    useEffect(() => {
     setUser();
     leaveAPI();
@@ -242,7 +291,7 @@ const appr = (approve) =>{
                 />
               </TabPane>
               <TabPane tab="Calendar" key="2">
-                <Calendar dateCellRender={dateCellRender}/>
+                <Calendar dateCellRender={dateCellRendert} />
               </TabPane>
             </Tabs>
             </Card>
