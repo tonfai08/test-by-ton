@@ -107,17 +107,17 @@ const appr = (approve) =>{
 }
 
 
-  function dateCellRender(value) {
-    const day = moment( value, 'MM-DD-YYYY HH:mm:ss',true).format("YYYY-MM-DD");
-    let leave_text;
-    if(day === "2021-12-20") {
-       leave_text = "ลา";
-    }
-    else {
-       leave_text = "";
-    }
-    return <div>{leave_text}</div>;
-  }
+  // function dateCellRender(value) {
+  //   const day = moment( value, 'MM-DD-YYYY HH:mm:ss',true).format("YYYY-MM-DD");
+  //   let leave_text;
+  //   if(day === "2021-12-20") {
+  //      leave_text = "ลา";
+  //   }
+  //   else {
+  //      leave_text = "";
+  //   }
+  //   return <div>{leave_text}</div>;
+  // }
  
   const checkToken = () => {
     const token = localStorage.getItem('token');
@@ -185,47 +185,45 @@ const appr = (approve) =>{
 
   ];
 
-  // const dateCellRendert = (value) => {
-  //   console.log('value',moment(value).format('YYYY/MM/DD'));
-    
-  //   const listData = getListData(value);
-  //   listData.map((item) => {
-  //     if (item !== 'undefined') {
-  //       console.log('ไม่ผ่าน',item.content);
-  //       return "test test";
-        
-  //     }
-  //     console.log('ผ่าน',item.content);
-  //     return (
-  //       <ul className="events">
-  //         <li key={item.content}>
-  //           <Badge status={item.type} text={item.content} />
-  //         </li>
-  //     </ul>
-  //     );
-  //   })
-  // }
+ 
  
   const dateCellRendert = (value) => {
     const listData = getListData(value);
-    console.log(listData[0]);
-    return (
-      <ul className="events">
-        {listData.map(item => (
-          <li key={item.day}>
-            <Badge status={item.type} text={item.content} />
-          </li>
-        ))}
-      </ul>
-    );
-  }                                                 
+
+
+    
+    // return listData.map(item => {
+    //   console.log(item.type);
+    //   if(item.type === undefined ){
+    //     return null;
+    //   }
+    //   return (
+    //     <ul className="events">
+    //        <li key={item.content}>
+    //          <Badge status={item.type} text={item.content} />
+    //        </li>
+    //     </ul>
+    //   )
+    // })
+      return (
+        <div className="new-line">
+         {listData.map(item => (
+          <Badge status={item.type} text={item.content} />
+          
+          ))}
+        </div>
+        
+      );
+    
+  }                       
+ 
   const holiday = [
     { day: '2022/02/14', content: 'วาเลนไท', type: 'error' },
     { day: '2022/02/14', content: 'วาเลนไท', type: 'success' },
     { day: '2022/03/01', content: 'อยากหยุด', type: 'error'  },
     { day: '2022/03/25', content: 'ก็จะหยุดอะ', type: 'error'  },
   ];
-  function getListData(value) {
+  const getListData = (value) => {
     let listData;
     listData = holiday.filter(holiday => holiday.day === moment(value).format('YYYY/MM/DD'));
     return listData;
