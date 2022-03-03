@@ -29,7 +29,7 @@ const Home = () => {
       message.error(api.detail)
     }
     else{
-      message.success(api.detail)
+      message.success("ยินดีต้อนรับ")
       localStorage.setItem('token',api.detail);
       checkToken();
     }

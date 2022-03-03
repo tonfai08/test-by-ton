@@ -6,6 +6,7 @@ import Home from './page/Home';
 import User from './page/User';
 import Login from './page/Login';
 import UserAdd from './page/UserAdd';
+import LeaveAdmin from './page/LeaveAdmin';
 import 'antd/dist/antd.css';
 //import Test from './component/test';
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="/login"><Login /></Route>
         <Route exact path="/user"><User /></Route>
         <Route path="/user/new"><UserAdd /></Route>
+        <Route path="/leaveAdmin"><LeaveAdmin /></Route>
       </Switch>
 
   );

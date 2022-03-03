@@ -52,7 +52,7 @@ const Leave = () => {
       return "ลาป่วย";
     }
     else if(intType === 3){
-      return "ลาบวช";
+      return "ลาไปเรื่อย";
     }
     else {
       return "ลาตุ้ย";
@@ -128,11 +128,11 @@ const appr = (approve) =>{
    };
 
    const onFinish = (values) => {
-    //console.log('Success:', values);
 
-    const myJSON = JSON.stringify(values);
-    //console.log('myJSON:', myJSON);
+    //const myJSON = JSON.stringify(values);
+
     values.empId=decode1.id;
+    values.name={first_name:decode1.first_name,last_name:decode1.last_name};
     axios.post(`${baseURL}leave`,
       values,{
         headers:{
@@ -143,7 +143,7 @@ const appr = (approve) =>{
       setData(respons.data)
     })
       leaveAPI();
-      message.error('Success');
+      message.success('Success');
   };
   const columns = [
     {
@@ -166,7 +166,7 @@ const appr = (approve) =>{
     },
     {
       title: 'การอนุมัติ',
-      dataIndex: 'approver',
+      dataIndex: 'approve',
       render: (t, r, i) => 
       <>{appr(t)}</>,
     },
@@ -185,7 +185,13 @@ const appr = (approve) =>{
 
   ];
 
- 
+ const dayLeave = (day) =>{
+  console.log('day'+day.format('YYYY/MM/DD'))
+  if(moment(day).isBetween(moment('2022/03/05').startOf('day'),moment('2022/03/05').endOf('day'))){
+    return true
+  }
+  return false
+ }
  
   const dateCellRendert = (value) => {
     const listData = getListData(value);
@@ -261,7 +267,7 @@ const appr = (approve) =>{
                     </Select>
                   </Form.Item>
                   <Form.Item name="date_leave" label="วันที่ลา">
-                   <RangePicker />
+                   <RangePicker disabledDate={dayLeave}/>
                   </Form.Item>
                   <Form.Item name="note" label="เหตุผลในการลา">
                     <TextArea rows={4} />

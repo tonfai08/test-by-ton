@@ -41,6 +41,11 @@ const AppLayout = (props) => {
               <Link to="/user">User</Link>
             </Menu.Item>
             :""}
+            {decode1.role === "Admin"? 
+            <Menu.Item key="leaveAdmin" icon={<DesktopOutlined />}>
+              <Link to="/leaveAdmin">Leave Admin</Link>
+            </Menu.Item>
+            :""}
             <Menu.Item key="Leave" icon={<FileOutlined />}>
              <Link to="/leave">Leave</Link>
             </Menu.Item>
